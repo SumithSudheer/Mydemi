@@ -1,0 +1,19 @@
+.header{
+    font-family: udemy sans,-apple-system,BlinkMacSystemFont,Roboto,segoe ui,Helvetica,Arial,sans-serif,apple color emoji,segoe ui emoji,segoe ui symbol;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -.02rem;
+    font-size: 1.6rem;
+}
+.list{
+    align-items: flex-start;
+}
+.section{
+    display: block;
+    text-align:start;
+    padding: 5%;
+    margin-top: 1%;
+}
+.main{
+   
+}

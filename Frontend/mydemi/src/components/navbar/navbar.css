@@ -1,0 +1,7 @@
+.logout{
+    background-color: brown;
+    /* width: 100%; */
+    float:right;
+    align-self: flex-end;
+    display: flex;
+}
