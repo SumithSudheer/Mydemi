@@ -23,3 +23,6 @@
 .down{
     margin-top: 10ox;
 }
+button{
+    position: inherit;
+}

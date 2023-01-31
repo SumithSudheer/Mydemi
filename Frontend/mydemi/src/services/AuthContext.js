@@ -9,6 +9,11 @@ const AuthContext = createContext();
 export default AuthContext;
 
 export const AuthProvider = ({ children }) => {
+  const [crntVideo, setCrntVideo] = useState('')
+  const [cvid, setcvid] = useState(null)
+  const[video, setVideo]=useState([])
+
+
   const [authTokens, setAuthTokens] = useState(() =>
     localStorage.getItem("authTokens")
       ? JSON.parse(localStorage.getItem("authTokens"))
@@ -98,7 +103,14 @@ export const AuthProvider = ({ children }) => {
     registerUser,
     loginUser,
     logoutUser,
-    FirebaseContext
+    FirebaseContext,
+    crntVideo,
+    setCrntVideo,
+    setcvid,
+    cvid,
+    video,
+    setVideo
+    
   };
 
   useEffect(() => {

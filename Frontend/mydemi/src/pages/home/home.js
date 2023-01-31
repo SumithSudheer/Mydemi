@@ -3,6 +3,10 @@ import Navbar from '../../components/navbar/navbar'
 import AuthContext from '../../services/AuthContext'
 import Cookies from 'universal-cookie';
 import Headbanner from '../../components/Home/HeadBanner/Headbanner'
+import Header from "../../components/Home/components/Header";
+import HomeContent from "../../components/Home/components/HomeContent";
+import HomeFooter from "../../components/Home/components/HomeFooter";
+
 
 
 function Home() {
@@ -14,8 +18,9 @@ function Home() {
   return (
     <div>
 
-    <Navbar/>
-    <Headbanner/>
+    <Header/>
+    <HomeContent/>
+    <HomeFooter/>
     </div>
   )
 }

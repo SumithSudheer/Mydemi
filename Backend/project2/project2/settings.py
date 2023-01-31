@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from datetime import timedelta
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -44,6 +45,9 @@ INSTALLED_APPS = [
 
     'user',
     'tutor',
+    'analytics',
+
+    'storages',
     # 'djoser',
     # "rest_framework.authtoken",
     # 'oauth2_provider',
@@ -233,7 +237,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = 'static/'
+MEDIA_URL = '/media/'
 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
@@ -278,61 +284,18 @@ AUTHENTICATION_BACKENDS = (
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '121176681845-0a44sp8pe1r383bm29un16tq1lah24hl.apps.googleusercontent.com'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
 
-# SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
-#     'https://www.googleapis.com/auth/userinfo.email',
-#     'https://www.googleapis.com/auth/userinfo.profile',
-# ]
-
-# SOCIAL_AUTH_URL_NAMESPACE = 'social'
-
-# Facebook configuration
-# SOCIAL_AUTH_FACEBOOK_KEY = '3363573760579318'
-# SOCIAL_AUTH_FACEBOOK_SECRET = '3c6f691d3ed3dcf059b40e81bd080bf2'
-
-# Define SOCIAL_AUTH_FACEBOOK_SCOPE to get extra permissions from Facebook.
-# Email is not sent by default, to get it, you must request the email permission.
-# SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
-# SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
-#     'fields': 'id, name, email'
-# }
-
-# SOCIAL_AUTH_USER_FIELDS = ['email', 'username', 'first_name', 'password']
 
 
-# CORS_ORIGIN_WHITELIST = [
-#      "http://localhost:3000",
-#      "http://127.0.0.1:3000", 
-# ]
-
-# ROOT_URLCONF = 'project2.urls'
-
-# SITE_ID = 1
 
 
-# # Provider specific settings
-# SOCIALACCOUNT_PROVIDERS = {
-#     'google': {
-#         # For each OAuth based provider, either add a ``SocialApp``
-#         # (``socialaccount`` app) containing the required client
-#         # credentials, or list them here:
-#         'APP': {
-#             'client_id': '121176681845-0a44sp8pe1r383bm29un16tq1lah24hl.apps.googleusercontent.com',
-#             'secret': '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',
-#             'key': ''
-#         },
-#         'SCOPE': [
-#             'profile',
-#             'email',
-#         ],
-#         'AUTH_PARAMS': {
-#             'access_type': 'online',
-#         },
-#         'OAUTH_PKCE_ENABLED': True,
-#     }
-# }
+# AWS_ACCESS_KEY_ID = 'AKIATESA3MN3B46ASWPM'
+# AWS_SECRET_ACCESS_KEY = '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'
+# AWS_STORAGE_NAME = 'mydemi'
+
+# AWS_S3_FILE_OVERWRITE = False
+# AWS_DEFAULT_ALC = None
+# DEFAULT_FILE_STORAGE  = 'storages.backends.s3boto3.S3Boto3Storage'
 
 
-# ACCOUNT_USER_MODEL_USERNAME_FIELD = None
-# ACCOUNT_EMAIL_REQUIRED = True
-# ACCOUNT_USERNAME_REQUIRED = False
-# ACCOUNT_AUTHENTICATION_METHOD = 'email'
+STATIC_ROOT= 'static'
+STATICFILES_DIRS = [BASE_DIR / "staticdir"]

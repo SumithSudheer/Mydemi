@@ -1,86 +1,115 @@
-import React,{useState, useEffect} from 'react'
+import React,{useState, useEffect, useContext} from 'react'
 import './videoList.css'
+import AuthContext from '../../../services/AuthContext'
 
-function Videolist() {
-    const[section, setSection]=useState([{name:'section1',status:true},{name:'section2',status:false}])
+function Videolist(props) {
+    const {setCrntVideo} = useContext(AuthContext)
+    const {crntVideo} = useContext(AuthContext)
+    const {setcvid} = useContext(AuthContext)
+    const {video} = useContext(AuthContext)
+    const {setVideo} = useContext(AuthContext)
 
-   const handleCLick = function  (name) {
-    let k =name
-    let v = section
-    console.log(typeof(section));
-    v.map( (j)=>{
 
-        if(j.name===k && j.status===false){
-            j.status=true
-        }else{
-            j.status=false
-        }
+    const[section, setSection]=useState([])
+    const[sec, setSec]=useState([])
+    // const[video, setVideo]=useState([])
+    const[crnt ,setCrnt] = useState(null)
+
+
+
+    function handleVideoSelection(selectedVideo,id){
+        console.log(crntVideo,'llllllbbbbbbbbbbbbbbbbbbbbbb')
+        // setVideo(video)
+        setCrntVideo(selectedVideo);
+        setcvid(id)
     }
 
-    )
-    setSection(v)
-    console.log(section)
-    
+   const handleCLick = function  (name, id) {
+    let v = section
+    let p = v.map( (j,index)=>{
 
-    // if (v.filter(i=>i.name==k && i.status)){
-    //     i.status=true
-        
-    //     setSection(v)
-    //     console.log(section)
-
-    // }else{
-
-    //     v.k= true
-    //     setSection(v)
-    // }
-    console.log(section)
-    
-    
+        if(index === name){
+          return  !j
+       }
    }
 
+   )
+    setSection(p)
+    getVideo(id)
 
+    
+}
+console.log(video,'jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj')
+
+async function getVideo (id) {
+    let response = await fetch(`http://127.0.0.1:8000/tutor/video/?s=${id}`)
+    response = await response.json()
+    setVideo(response.data)
+   
+    }
+
+
+ async function getSection () {
+let response = await fetch(`http://127.0.0.1:8000/tutor/section/?pk=${props.props}`)
+response = await response.json()
+setSec(response.data)
+let p =[]
+for (let i=0; i<response.data.length; i++){
+    p.push(false)
+}
+setSection(p)
+}
     useEffect(()=>{
-        setSection([{name:'section1',status:true},{name:'section2',status:false}])
-        console.log(section)
-        // let k=section
-        // k.section1=false
-        // setSection(k)
-        // console.log(section)
-        
+       getSection()
+    
     },[])
   return (
-    <div>
+    <div >
         <div className='list'>
             <div className='header'>
                 Content
             </div>
             <div className='main'>
-                <div className='section' >
-                    {section.map((i)=>{
+                <div  >
+                    {sec.map((i, index)=>(
                         <div>
-                        <button onClick={()=>{handleCLick(i.name)}}>
+                        <div className='section' id={i.id} key={index}>
 
-                        
+                        <p onClick={()=>{handleCLick(index, i.id)}}>
 
-                            {i}
-                            
-                        </button>
+                         {i.name}
+                    
+                        </p>
 
+                        </div>
+                    <div className='videos_list'>
+                        { 
+                            section[index]? 
+                            <div className="card container" >
+                                <ul className="list-group list-group-flush">
+                                {
+                                    video.map((x ,index)=>(
+                                        
+                                        
+                                        <li className="list-group-item" onClick={(()=>(handleVideoSelection(x.video,x.id)))}>{x.name} <p className='desc'>{x.description} {index}</p> </li>
+                                    ))
+                                }
+
+                                
+                                </ul>
+                                </div>
+                            : null
+                        }
+                      
+                    </div>
                     </div>
 
-                    }
+                    )
                         
                     )}
                     
-                    <div>
-                        {
-                            section.section1? <div>yes</div> : null
-                        }
-                    </div>
                 </div>
-                <div className='section'>
-                    section2
-                </div>
+                
             </div>
         </div>
     </div>

@@ -10,6 +10,7 @@ from user.validate import is_auth_staff
 from .serializer import CourseSerializers, SectionSerializers, VideoSerializers, StandardResultsSetPagination
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.decorators import api_view
+from analytics.models import Views
 
 # Create your views here.
 
@@ -24,47 +25,47 @@ def delete_video(request, pk, format=None):
 class Course_md(APIView):
 
     authentication_classes = [JWTAuthentication]
-    # pagination_class = StandardResultsSetPagination
-    # permission_classes = [ IsAuthenticated ]
 
     def post(self, request):
         if is_auth_staff(request):
+            print('kkkkkkkkkkkkkkkkkkkkkkk')
+            print(request.data)
             try:
                 st = User.objects.get(id=request.data['user']['user_id'])
             except:
                 return Response({"message": "User cant be found"})
             try:
                 course = Course(
-                    name=request.data['name'], description=request.data['description'], staff=st)
+                    name=request.data['name'], description=request.data['description'], staff=st, thumbnail=request.data['thumbnail'])
                 course.save()
-            except:
+            except Exception as e:
+                print(e)
                 return Response({"message": "Couldnt save the details"})
             return Response({"message": "Course was added"})
         else:
             return Response({"message": "Course was not added"})
 
     def get(self, request):
-
-        print(request.user)
-        print(request.headers)
         if is_auth_staff(request):
             print('yes')
-        course = Course.objects.filter(staff=request.GET['pk'])
-        count = Course.objects.filter(staff=request.GET['pk']).count()
-        print(count)
         try:
-            if request.GET['limit']:
-                print('lllllllllllllllllllllllkjxkskxmksmxksmxkmksx')
-                paginator = LimitOffsetPagination()
-                result = paginator.paginate_queryset(course, request)
-                print(course)
-                serial = CourseSerializers(result, many=True)
-                # serial = StandardResultsSetPagination(serial.data)
-                print(serial)
-                return Response({"message": "helloget", "count": count, "data": serial.data})
+            course = Course.objects.filter(staff=request.GET['pk'])
+            count = Course.objects.filter(staff=request.GET['pk']).count()
+            print(count)
         except:
-            serial = CourseSerializers(course, many=True)
-            return Response({"message": "helloget", "data": serial.data})
+            course = Course.objects.filter()
+        # try:
+        #     if request.GET['limit']:
+        #         paginator = LimitOffsetPagination()
+        #         result = paginator.paginate_queryset(course, request)
+        #         print(course)
+        #         serial = CourseSerializers(result, many=True)
+        #         # serial = StandardResultsSetPagination(serial.data)
+        #         print(serial)
+        #         return Response({"message": "helloget", "count": count, "data": serial.data})
+        # except Exception as e:
+        serial = CourseSerializers(course, many=True)
+        return Response({"message": "helloget", "data": serial.data})
 
 
 class Section_md(APIView):
@@ -102,18 +103,36 @@ class Video_md(APIView):
         name = request.data['name']
         vid = request.data['video']
         description = request.data['description']
+        print(request.data['thumbnail'])
         if vid == '':
             return Response({"message": "error"})
         video = Video(name=name, description=description,
-                      section=section, course=cs, video=vid)
+                      section=section, course=cs, video=vid, thumbnail=request.data['thumbnail'])
         video.save()
         print(request.data)
         return Response({"message": "done"})
 
-    def get(self, request):
+    def get(self, request, pk=None):
+        try:
+            video = Video.objects.filter(section=request.GET['s'])
+        except:
+            try:
+                video = Video.objects.filter(course=request.GET['c'])
+            except:
+                video = Video.objects.filter(id=pk)
+                try:
+                    video1 = Video.objects.get(id=pk)
 
-        print(request.user)
-        video = Video.objects.filter(section=request.GET['s'])
+                    views = Views.objects.get_or_create(video=video1)
+                    print(views[0].view)
+                    vi = Views.objects.filter(video=video1).update(view=views[0].view+1)
+                except Exception as e:
+                    print(e)
+                    # views = Views(video=video,view=1)
+                    # views.save()
+
+
+
         serial = VideoSerializers(video, many=True)
 
         return Response({'data': serial.data})
@@ -130,16 +149,13 @@ class Video_md(APIView):
             return Response(serial.data)
         return Response(serial.error, status=status.HTTP_400_BAD_REQUEST)
 
+
 @api_view(['PATCH'])
-def staf_register(request,id):
+def staf_register(request, id):
     try:
         user = User.objects.filter(id=id).update(staff=True)
         print(user)
     except Exception as e:
-        return Response({"message":e})
+        return Response({"message": e})
     else:
-        return Response({"message":"success"})
-
-
-    
-
+        return Response({"message": "success"})

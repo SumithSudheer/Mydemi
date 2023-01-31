@@ -45,7 +45,7 @@ function AddVideos() {
                 "section":value1,
                 "course":value2,
                 "video":vid,
-                "user": user
+                "user": user,
               })
               
         }).then(
@@ -56,6 +56,7 @@ function AddVideos() {
     // const {firebase} = useContext(FirebaseContext)
     const {user} = useContext(AuthContext)
     const [file, setFile]=useState(null)
+
     const [section, setSection]= useState([])
     const [desc, setDesc] = useState('')
     const [sec, setSec] = useState('')
@@ -76,17 +77,17 @@ function AddVideos() {
 
         uploadBytes(videoRef, file ).then((snapshot)=>{
             getDownloadURL(snapshot.ref).then((url)=>{
-                // alert('done'+url)
-                console.log('lljkjkjkjkjkjkjkjkj')
                 setVideo(url)
                 console.log(vid)
                 if (vid == ''){
+                    handleSubmit()
                     alert('error happend while uploading video try again')
                     return
                 }
                 handle()
             })
         })
+        
     }
         console.log(cou);
         console.log(sec);
@@ -244,6 +245,8 @@ function AddVideos() {
     <label for="exampleFormControlFile1">File to upload</label> <span></span>
     <input type="file" className="form-control-file" id="exampleFormControlFile1" onChange={(e)=>{setFile(e.target.files[0])}}/>
   </div>
+
+  
         <br />
         <div className='submit-btn'>
         <button onClick={handleSubmit} type="submit" className="btn btn-primary ">Submit</button>

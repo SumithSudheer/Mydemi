@@ -1,5 +1,11 @@
 .course_content{
    
-    background-color: rgb(173, 173, 173);
+    background-color: rgb(181, 77, 255);
     /* height: 900px; */
+}
+
+.bigvideolist{
+    background-color: blueviolet;
+    /* height: 745px;
+    width: 980px; */
 }
